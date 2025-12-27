@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1766834770 source:c:\users\cbs\desktop\serieux\projet_final\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
