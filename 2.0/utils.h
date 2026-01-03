@@ -3,6 +3,7 @@
 
 #include "structures.h"
 
+
 void normaliserMot(char *mot);
 int estCaractereValide(char c);
 void extraireMots(const char *fichier, void *structure, int algo, InfoMem *infoMem);

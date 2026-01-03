@@ -16,7 +16,7 @@ int estCaractereValide(char c) {
     return isalpha(c) || c == '-';
 }
 
-void extraireMots(const char *fichier, void *structure, int algo, InfoMem *infoMem) {
+void extraireMots( const char *fichier, void *structure, int algo, InfoMem *infoMem) {
     FILE *f = fopen(fichier, "r");
     if (!f) {
         printf("Erreur: impossible d'ouvrir le fichier %s\n", fichier);
@@ -53,24 +53,6 @@ void extraireMots(const char *fichier, void *structure, int algo, InfoMem *infoM
             }
         }
     }
-    
-    if (idx > 0) {
-        buffer[idx] = '\0';
-        normaliserMot(buffer);
-        
-        switch(algo) {
-            case 1:
-                ajouterMotTableau((TableauMots*)structure, buffer);
-                break;
-            case 2:
-                ajouterMotListe((ListeMots*)structure, buffer);
-                break;
-            case 3:
-                ajouterMotHash((TableHash*)structure, buffer);
-                break;
-        }
-    }
-    
     fclose(f);
 }
 
