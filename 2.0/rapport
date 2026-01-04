@@ -1,0 +1,132 @@
+# le rapport:
+
+##Le fichier .zip contient les éléments suivants:---------------------------------------------------------------------------------------##
+
+Script Python : pour visualiser les résultats sous forme de graphiques à l’aide de la bibliothèque matplotlib.
+
+cmake-build-debug : pour pouvoir compiler le code, étant donné que le projet a été développé sur CLion.
+
+algo_hash.c : contient différentes fonctions pour l’ajout, la suppression et l’extraction sur une table de hachage.
+
+algo_liste.c : contient différentes fonctions pour l’ajout, la suppression et l’extraction sur une liste chaînée.
+
+algo_tableau.c : contient différentes fonctions pour l’ajout, la suppression et l’extraction sur un tableau dynamique.
+
+gereMem.c : contient les fonctions de gestion de la mémoire, telles que myMalloc, myRealloc et myFree.
+
+structures.c : contient les différentes structures pour représenter les trois types d’objets (tableau, liste chaînée, table de hachage).
+
+utils.c : contient les fonctions principales telles que extraireMots, nombre_occurrence, afficherResultats.
+
+main.c : lit un fichier texte et applique les différentes instructions de l’utilisateur pour choisir l’algorithme ou la méthode souhaitée.
+##-----------------------------------------------------------------------------------------------------------------------------------------##
+##Fonctions principales--------------------------------------------------------------------------------------------------------------------##
+Gestion de la mémoire (InfoMem)
+
+Nous avons implémenté une structure spéciale pour suivre l’utilisation de la mémoire :
+
+typedef struct {
+    size_t cumul_alloc;    // Mémoire allouée cumulée
+    size_t cumul_desalloc; // Mémoire désallouée cumulée
+    size_t max_alloc;      // Différence maximale entre les deux
+} InfoMem;
+
+
+**myMalloc : alloue de la mémoire comme malloc tout en mettant à jour les statistiques dans InfoMem.
+
+Si size == 0 ou infoMem == NULL, retourne NULL.
+
+Sinon, appelle malloc(size), met à jour cumul_alloc, et ajuste max_alloc si nécessaire.
+
+**myRealloc : redimensionne un bloc de mémoire tout en mettant à jour InfoMem.
+
+Si ptr == NULL, se comporte comme myMalloc.
+
+Si new_size == 0, libère la mémoire avec myFree et retourne NULL.
+
+Met à jour cumul_alloc et cumul_desalloc selon le changement de taille et le nouveau pointeur.
+
+Ajuste max_alloc si nécessaire.
+
+**myFree : libère un bloc mémoire et met à jour InfoMem.
+
+Si ptr == NULL ou infoMem == NULL, ne fait rien.
+
+Sinon, appelle free(ptr) et ajoute old_size à cumul_desalloc.
+
+Fonctions de traitement de texte:
+
+**normaliserMot : met un mot en minuscules directement dans le buffer passé en paramètre.
+
+**extraireMots : lit un fichier texte et extrait tous les mots valides, puis les ajoute dans la structure choisie (tableau, liste ou table de hachage) après normalisation.
+
+**ajouterMotListe : ajoute un mot dans une liste chaînée, compte les occurrences et maintient l’ordre décroissant des occurrences.
+
+*$*ajouterMotTableau : ajoute un mot dans un tableau dynamique, compte les occurrences et redimensionne le tableau si nécessaire.
+
+**ajouterMotHash : ajoute un mot dans une table de hachage, gère les collisions et compte les occurrences.
+
+**tableHashVersTableau : convertit une table de hachage en tableau de mots avec leurs occurrences, puis trie le tableau par occurrences.
+
+**main : programme principal qui:
+
+lit le fichier texte et le nom de fichier fourni par l’utilisateur,
+
+permet de choisir l’algorithme (tableau, liste ou table de hachage),
+
+affiche le nombre de mots à afficher,
+
+mesure le temps d’exécution avec clock,
+
+affiche les résultats et les statistiques de mémoire,
+
+libère la mémoire correctement selon la structure utilisée.
+##--------------------------------------------------------------------##
+#Étude comparative-----------------------------------------------------------------##
+
+*Tableau non trie: utilise une mémoire contiguë, très efficace pour le cache CPU,
+ simple à implémenter. L’insertion nécessite de vérifier si le mot existe déjà,
+ ce qui est linéaire en fonction du nombre de mots. Rapidité élevée pour de petits
+ fichiers mais ralentissement progressif pour les fichiers volumineux. La mémoire est
+ faible mais nécessite des reallocations.
+
+*Liste chaînée triée: chaque mot est stocké dans un noeud avec un pointeur, ce qui
+augmente la consommation mémoire et peut provoquer de la fragmentation. Avantages: les mots
+ sont automatiquement triés par occurrences décroissantes. Insertion et recherche sont linéaires,
+  ce qui rend cette méthode lente pour de grands fichiers.
+
+*Table de hachage: insertion et recherche en temps constant moyen, très efficace pour les grands
+fichiers et un grand nombre de mots uniques. Consomme légèrement plus de mémoire qu’un tableau simple
+ en raison du tableau de pointeurs et des listes chaînées pour gérer les collisions. Les performances dépend
+ ent de la qualité de la fonction de hachage.
+
+Résumé: le tableau non trié est adapté aux petits fichiers, la liste triée est utile pour un tri automatique malgré
+ un coût mémoire plus élevé, et la table de hachage offre le meilleur compromis pour les grands fichiers nécessitant
+ rapidité et efficacité mémoire.
+##--------------------------------------------------------------------------------------------------------------------##
+#Organisation en termes de recherche et conception d’algorithmes------------------------------------------------------##
+
+Au début, nous avons cherché à parcourir les fichiers texte mot par mot. Ensuite, nous avons réfléchi à extraire chaque
+ mot et le placer dans une structure adaptée: tableau dynamique, liste chaînée ou table de hachage. Pour chaque algorithme
+ nous avons calculé les occurrences des mots et les avons triés en ordre décroissant.
+Nous avons également intégré InfoMem dans chaque algorithme afin de suivre l’évolution de l’espace mémoire utilisé, ainsi
+ que le temps d’exécution avec la fonction clock. Enfin, un menu interactif dans main permet à l’utilisateur de choisir
+ l’algorithme pour traiter son fichier et d’afficher les statistiques correspondantes.
+##--Organisation du travail en groupe---------------------------------------------------------------------------------##
+Massinissa (50%) :
+main.c
+utils.c
+structures.c
+algo_tableau.c
+rapport.txt
+Eliotte (50%) :
+algo_hash.c
+algo_liste.c
+gereMem.c
+script.py
+Nous avons travaillé sur GitHub où chacun a pris ses responsabilités de manière claire et organisée.
+##--------------------------------------------------------------------------------------------------------------------##
+Nous remercions chaleureusement le lecteur de ce rapport pour le temps consacré à sa lecture et pour l’intérêt porté
+à notre travail.
+
+                  end
